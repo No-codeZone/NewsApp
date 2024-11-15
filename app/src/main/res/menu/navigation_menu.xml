@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile"
+            android:title="Profile"
+            android:iconTint="@color/white"
+            android:icon="@drawable/profile"/>
+        <item
+            android:id="@+id/nav_whats_new"
+            android:iconTint="@color/white"
+            android:icon="@drawable/new_releases"
+            android:title="What's new" />
+        <item
+            android:id="@+id/nav_category"
+            android:icon="@drawable/category"
+            android:iconTint="@color/white"
+            android:title="Category" />
+        <item
+            android:id="@+id/nav_trending"
+            android:icon="@drawable/newspaper_category"
+            android:iconTint="@color/white"
+            android:title="Latest" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/logout"
+            android:iconTint="@color/white"
+            android:title="Logout" />
+    </group>
+
+</menu>
