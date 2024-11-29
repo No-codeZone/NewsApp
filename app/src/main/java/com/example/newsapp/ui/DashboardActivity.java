@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -28,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -58,9 +60,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     Toolbar toolbar;
+    TextView tvDesc,tvExpandDesc;
     NewsListAdapter newsListAdapter;
     NavigationView navigationView;
     ImageView clickMenu;
+    ImageButton shareWhatsapp;
     RecyclerView recyclerView;
     RecyclerView recyclerViewImg;
     List<String> imageList = new ArrayList<>();
@@ -70,6 +74,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private Spinner spinnerQuery;
     private Button buttonSearch;
     ProgressBar progressLoader;
+    CardView cardView;
     private final OnBackPressedDispatcher onBackPressedDispatcher = getOnBackPressedDispatcher();
 
 
@@ -78,7 +83,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dashboard);
-        //Spinner Data to get the articles
         List<String> queryOptions = new ArrayList<>();
         queryOptions.add("bitcoin");
         queryOptions.add("technology");
@@ -103,6 +107,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 return view;
             }
         };
+        ///OnBack pressed
         onBackPressedDispatcher.addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -129,6 +134,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         clickMenu = findViewById(R.id.iv_menu);
+        shareWhatsapp=findViewById(R.id.iv_wp);
         drawerLayout = findViewById(R.id.my_drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         clickMenu = findViewById(R.id.iv_menu);
@@ -156,6 +162,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 getNews(selectedQuery);
             }
         });
+        shareWhatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(DashboardActivity.this, "WhatsApp", Toast.LENGTH_SHORT).show();
+//                setShareWhatsapp();
+            }
+        });
     }
 
     @Override
@@ -171,7 +184,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }
         return super.onOptionsItemSelected(item);
     }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -240,6 +252,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                     progressLoader.setVisibility(View.GONE);
                     Log.d("TAG", "onResponse: Dashboard News Articles\t" + new Gson().toJson(response.body().getTotalResults()));
                     newsDataList.addAll(response.body().getArticles());
+                    for (int i=0;i<response.body().getArticles().size();i++){
+                        Log.d("TAG", "onResponse: ImageList 1\t"+imageList);
+                        imageList.add(response.body().getArticles().get(i).getUrlToImage());
+                        Log.d("TAG", "onResponse: ImageList 2\t"+imageList);
+                    }
                     newsListAdapter.notifyDataSetChanged();
                 }else{
                     progressLoader.setVisibility(View.GONE);
@@ -253,6 +270,18 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 Log.e("TAG", "onFailure: " + t.getLocalizedMessage().toString());
             }
         });
+    }
+
+    public void setShareWhatsapp(){
+        Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+        whatsappIntent.setType("text/plain");
+        whatsappIntent.setPackage("com.whatsapp");
+        whatsappIntent.putExtra(Intent.EXTRA_TEXT, "The text you wanted to share");
+        try {
+            startActivity(whatsappIntent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

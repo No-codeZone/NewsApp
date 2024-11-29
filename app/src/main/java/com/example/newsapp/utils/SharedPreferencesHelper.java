@@ -24,9 +24,9 @@ public class SharedPreferencesHelper {
     public boolean isLoggedIn() {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
     }
-    public String getUserName(){
-        return sharedPreferences.getString("username",STATIC_USERNAME);
-    }
+//    public String getUserName(){
+//        return sharedPreferences.getString("username",STATIC_USERNAME);
+//    }
 
     public void clear() {
         SharedPreferences.Editor editor = sharedPreferences.edit();

@@ -1,5 +1,7 @@
 package com.example.newsapp.adapter;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.newsapp.R;
 import com.example.newsapp.model.NewsRequestModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,23 +46,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         Log.d("TAG", "onBindViewHolder: "+newsData.getTitle());
         holder.txtTitle.setText(newsData.getTitle());
         holder.txtNewsSum.setText(newsData.getDescription());
-        /*String banner = imageList.get(position);
-        Log.d("TAG", "onBindViewHolder: ArticleImage List\t"+banner);
-        Glide.with(context)
-                .load(banner)
-//                .placeholder(R.drawable.logosmall)
+        String image = newsData.getUrlToImage();
+        Log.d("TAG", "onBindViewHolder: ArticleImage List\t"+newsData.getUrlToImage());
+        /*Glide.with(context)
+                .load(image)
+                .placeholder(R.drawable.logosmall)
                 .into(holder.imgURL);*/
-        // Check if imageList has an image for the current position
-       /* if (position < imageList.size()) {
-            String banner = imageList.get(position);
-            Glide.with(context)
-                    .load(banner)
-                    .into(holder.imgURL);
-        } else {
-            // Handle the case where there is no image
-            holder.imgURL.setImageResource(R.drawable.logosmall); // Set a placeholder image
-        }*/
-
+        Picasso.get().load(image).fit().into(holder.imgURL);
     }
     public int getItemCount() {
         Log.d("TAG", "getItemCount: "+newsRequestModelsList.size());
@@ -73,7 +67,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             super(itemView);
             txtTitle = itemView.findViewById(R.id.title);
             txtNewsSum = itemView.findViewById(R.id.tv_news_desc);
-//            imgURL=itemView.findViewById(R.id.img);
+            imgURL=itemView.findViewById(R.id.img);
         }
     }
 }
